@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 
 const authContext = createContext()
 
-const AuthContext = ({children}) => {
+const AuthProvider = ({children}) => {
   const [user, setUser] = useState(null)
   const [loading, setIsLoading] = useState(true)
 
@@ -28,11 +28,23 @@ const AuthContext = ({children}) => {
   const login = (user) =>{
     setUser(user)
   }
-  const logout = () =>{
-    setUser(null)
+  const logout =  async () =>{
+    try {
+      const res =  await  axios.post(
+        "http://localhost:6392/api/v1/users/auth/logout",
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(res)
+    } catch (error) {
+      console.log(error)
+    }
+    
   }
   return (
-    <authContext.Provider value={{user, login, logout}}>
+    <authContext.Provider value={{user, login, logout, loading}}>
       { children }
     </authContext.Provider>
   )
@@ -42,4 +54,4 @@ export const useAuth = ()=>{
   return useContext(authContext)
 }
 
-export default AuthContext
+export default AuthProvider

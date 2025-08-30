@@ -3,25 +3,22 @@ import Input from "../components/Input";
 import { Link, useNavigate } from "react-router-dom";
 import { useLoginForm } from "../hooks/useLoginForm";
 import Loader from "../components/Loader";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthProvider";
 
 const Login = () => {
   const { form, errors, isSubmitting, handleChange, handleSubmit } =
     useLoginForm();
-  const { login, user, isLoading } = useAuth();
-  const navigate = useNavigate()
+  const { login, user, loading } = useAuth();
+  const navigate = useNavigate();
 
-  if(user){
-    if(user.role === "admin"){
-    navigate("/admin-dashboard");
-
+  if (user) {
+    if (user.role === "admin") {
+      navigate("/admin-dashboard");
     } else {
-      console.log("employee")
-    navigate("/login");
-
+      console.log("employee");
+      navigate("/login");
     }
   }
-  
 
   const formData = [
     {
@@ -44,8 +41,13 @@ const Login = () => {
     },
   ];
 
-  if(isLoading){
-    return <Loader />
+  if (user) {
+    return (
+      <div className="w-full min-h-screen flex justify-center items-center">
+        {" "}
+        <Loader />
+      </div>
+    );
   }
   return (
     <>

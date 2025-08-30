@@ -1,14 +1,14 @@
 import { useCallback, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 
 export const useLoginForm = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [isSubmitting, setIsSubmitting] = useState(null);
   const [errors, setErrors] = useState({});
-  const { login } = useAuth()
-  const navigate = useNavigate()
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = useCallback(
     (e) => {
@@ -54,7 +54,6 @@ export const useLoginForm = () => {
 
   const handleSubmit = useCallback(
     async (e) => {
-      
       e.preventDefault();
 
       const result = validateForm();
@@ -64,7 +63,7 @@ export const useLoginForm = () => {
         console.log("invalid error");
         return;
       }
-    
+
       setIsSubmitting(true);
 
       try {
@@ -76,18 +75,16 @@ export const useLoginForm = () => {
           }
         );
         console.log("response :", response);
-        login(response.data.data)
-        localStorage.setItem("user",JSON.stringify(response.data.data))
+        login(response.data.data);
+        localStorage.setItem("user", JSON.stringify(response.data.data));
 
         if (response?.data?.success) {
-          
           // Reset form on success
           setForm({ email: "", password: "" });
           setErrors({});
-          console.log("role", response.data.data.role)
-          if(response.data.data.role.toLowerCase() === "admin")
-          navigate("/admin-dashboard");
-       
+          console.log("role", response.data.data.role);
+          if (response.data.data.role.toLowerCase() === "admin")
+            navigate("/admin-dashboard");
         }
       } catch (error) {
         console.error("Login error:", error);
