@@ -39,7 +39,7 @@ const DashboardSidebar = () => {
           <FaUsers /> <span>Employee</span>
         </NavLink>
         <NavLink
-          to="/dashboard"
+          to="/admin-dashboard/departments"
           className={({ isActive }) =>
             ` flex items-center p-1 ps-3 gap-3 text-white rounded  ${
               isActive ? "bg-teal-500 " : "bg-teal-400"

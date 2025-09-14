@@ -1,11 +1,13 @@
 import axios from 'axios'
 import React, { createContext, useContext, useEffect, useState } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 const authContext = createContext()
 
 const AuthProvider = ({children}) => {
   const [user, setUser] = useState(null)
   const [loading, setIsLoading] = useState(true)
+  // const navigate = useNavigate()
 
   useEffect(()=>{
     const getUser = async ()=>{
@@ -38,6 +40,12 @@ const AuthProvider = ({children}) => {
         }
       );
       console.log(res)
+      if(res && res.data.statusCode === 200){
+        setUser(null)
+        window.location.assign("/login")
+        // navigate("/login")
+        // <Navigate to={"/login"} />
+      }
     } catch (error) {
       console.log(error)
     }
